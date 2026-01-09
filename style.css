@@ -1,0 +1,320 @@
+/* --- SUARCORP: ELITE FINAL EDITION (2026) --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600;800&display=swap');
+
+/* =========================================
+   1. RESET Y VARIABLES
+   ========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    /* COLORES */
+    --bg-black: #000000;
+    --bg-dark: #080808;
+    --bg-card: #111111;
+    
+    /* ORO PREMIUM */
+    --gold: #D4AF37;       /* Oro Sólido */
+    --gold-bright: #FFD700; /* Oro Brillante */
+    --gold-grad: linear-gradient(to bottom, #FFD700, #DAA520);
+    
+    /* TEXTO */
+    --text-white: #eeeeee;
+    --text-gray: #888888;
+    
+    /* UI */
+    --radius: 8px;
+    --border: 1px solid #222;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-black);
+    color: var(--text-white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+/* =========================================
+   2. TIPOGRAFÍA & MARCA
+   ========================================= */
+h1, h2, h3, .brand {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-bright);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Efecto Destello (Shimmer) */
+.shimmer {
+    background: linear-gradient(to right, #bf953f 20%, #fcf6ba 40%, #b38728 60%, #bf953f 80%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shine 3s linear infinite;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+/* =========================================
+   3. COMPONENTES UI GLOBALES
+   ========================================= */
+/* Navbar */
+.navbar {
+    background: #050505;
+    border-bottom: var(--border);
+    padding: 0 15px;
+    height: 55px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 50;
+}
+.brand { font-size: 1rem; }
+
+/* Contenedor */
+.container {
+    padding: 15px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Tarjetas (PC y Dashboards) */
+.card {
+    background: var(--bg-card);
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* =========================================
+   4. FORMULARIOS
+   ========================================= */
+input, select {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    border: 1px solid #333;
+    border-bottom: 2px solid #444;
+    border-radius: 6px;
+    color: var(--gold);
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 15px;
+    font-family: 'Montserrat', sans-serif;
+}
+input:focus { border-color: var(--gold); background: #080808; }
+input::placeholder { color: #444; font-size: 0.8rem; text-transform: uppercase; }
+
+.btn {
+    width: 100%; padding: 14px;
+    border: none; border-radius: 6px;
+    font-weight: 800; text-transform: uppercase;
+    cursor: pointer; transition: 0.2s;
+    font-size: 0.9rem;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.btn-primary {
+    background: var(--gold-grad);
+    color: #000;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+
+.btn-dark {
+    background: #222; color: #fff; border: 1px solid #444;
+}
+
+/* =========================================
+   5. TABLAS HÍBRIDAS (PC = TABLA / MÓVIL = LISTA 2x2)
+   ========================================= */
+
+/* A. ESTILO PC (Escritorio) */
+table { width: 100%; border-collapse: collapse; }
+th { background: #000; color: var(--gold); padding: 12px; text-align: left; border-bottom: 2px solid #333; }
+td { padding: 12px; border-bottom: 1px solid #222; color: #ddd; vertical-align: middle; }
+
+/* B. ESTILO MÓVIL (Grid Compacto) */
+@media (max-width: 768px) {
+    
+    /* 1. Resetear Tabla */
+    table, thead, tbody, th, td, tr { display: block; width: 100%; }
+    thead { display: none; }
+    
+    /* 2. Fila = Grid 2 Columnas x 2 Filas */
+    tr {
+        display: grid;
+        grid-template-columns: 1fr auto; /* Izquierda Flexible | Derecha Ajustada */
+        grid-template-rows: auto auto;   /* 2 Renglones */
+        gap: 2px 10px;
+        
+        background: #000;
+        border-bottom: 1px solid #222;
+        padding: 12px 5px;
+        margin: 0;
+    }
+    
+    /* 3. Resetear Celdas */
+    td {
+        border: none; padding: 0;
+        text-align: left; position: relative;
+    }
+    td::before { display: none !important; } /* Sin etiquetas automáticas */
+    
+    /* --- DISTRIBUCIÓN AUTOMÁTICA DE CELDAS --- */
+
+    /* NOMBRE / PRODUCTO -> Arriba Izquierda */
+    td[data-label="PRODUCTO"], 
+    td[data-label="ITEM"],
+    td:nth-child(2) {
+        grid-column: 1; grid-row: 1;
+        font-weight: 700; color: #fff; font-size: 0.95rem;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* FECHA / CÓDIGO -> Abajo Izquierda */
+    td[data-label="FECHA"],
+    td[data-label="CÓDIGO"],
+    td[data-label="HORA"],
+    td:nth-child(1) {
+        grid-column: 1; grid-row: 2;
+        font-size: 0.75rem; color: #666; margin-top: 2px;
+    }
+
+    /* CANTIDAD / PRECIO / TOTAL -> Arriba Derecha */
+    td[data-label="CANTIDAD"],
+    td[data-label="PRECIO"],
+    td[data-label="TOTAL"],
+    td:nth-child(4) {
+        grid-column: 2; grid-row: 1;
+        text-align: right; font-weight: 800; font-size: 0.95rem;
+    }
+
+    /* SALDO / STOCK -> Abajo Derecha */
+    td[data-label="SALDO"],
+    td[data-label="STOCK"],
+    td[data-label="MARGEN"],
+    td[data-label="GANANCIA"],
+    td:nth-child(5) {
+        grid-column: 2; grid-row: 2;
+        text-align: right; font-size: 0.75rem; color: var(--gold);
+    }
+    
+    /* Etiquetas prefijo pequeñas para saldos */
+    td[data-label="SALDO"]::before { content: "SALDO: "; color: #444; font-size: 0.6rem; margin-right: 3px; display:inline!important; }
+    td[data-label="STOCK"]::before { content: "STOCK: "; color: #444; font-size: 0.6rem; margin-right: 3px; display:inline!important; }
+
+    /* COLUMNA TIPO (Entrada/Salida) -> OCULTA EN MÓVIL (Info va en el color del número) */
+    td[data-label="TIPO"], 
+    td[data-label="MOVIMIENTO"],
+    td:nth-child(3) {
+        display: none; 
+    }
+}
+
+/* Utilidades de Badges */
+.badge-in { color: #10b981; font-weight: 800; text-transform: uppercase; font-size: 0.8rem; }
+.badge-out { color: #ef4444; font-weight: 800; text-transform: uppercase; font-size: 0.8rem; }
+.mini-badge { padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; border: 1px solid #444; color: #888; text-transform: uppercase; }
+.mb-gold { border-color: var(--gold); color: var(--gold); }
+
+
+/* =========================================
+   6. POS VENDEDOR (TIENDA)
+   ========================================= */
+.pos-layout { flex: 1; display: flex; flex-direction: column; overflow: hidden; height: calc(100vh - 55px); }
+.catalog-area { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 80px; background: #000; }
+
+.prod-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 Columnas */
+    gap: 10px;
+}
+
+.prod-card {
+    background: #0e0e0e;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 110px;
+    position: relative;
+}
+.prod-card:active { border-color: var(--gold); background: #151515; }
+
+.prod-name {
+    font-size: 0.85rem; font-weight: 600; color: #fff;
+    line-height: 1.2; margin-bottom: 8px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.info-row { margin-top: auto; display: flex; flex-direction: column; gap: 2px; }
+.stock-display { font-size: 0.7rem; color: #555; text-transform: uppercase; }
+.price-display { font-size: 1.1rem; color: var(--gold-bright); font-weight: 800; }
+
+
+/* =========================================
+   7. FLOTANTES (FAB & MODAL)
+   ========================================= */
+.fab {
+    position: fixed; bottom: 20px; right: 15px; left: 15px;
+    background: var(--gold-grad); color: #000;
+    padding: 15px 25px; border-radius: 50px;
+    font-weight: 800; display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.6); z-index: 100;
+    font-size: 1rem; border: 2px solid #fff;
+}
+
+.overlay {
+    position: fixed; inset: 0; background: #000; z-index: 200;
+    display: none; flex-direction: column;
+}
+.overlay.open { display: flex; }
+
+.modal-bg {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300;
+    display: none; align-items: center; justify-content: center;
+}
+.modal-box {
+    background: #111; width: 90%; max-width: 320px; padding: 30px;
+    border: 1px solid var(--gold); border-radius: 15px;
+    box-shadow: 0 0 40px rgba(212,175,55,0.15);
+}
+
+.tab-row { display: flex; gap: 8px; margin-bottom: 20px; }
+.tab { flex: 1; padding: 10px; border: 1px solid #333; text-align: center; color: #666; font-size: 0.75rem; border-radius: 6px; font-weight: 700; }
+.tab.active { border-color: var(--gold); color: var(--gold); background: rgba(255,215,0,0.1); }
+
+.big-input {
+    font-size: 2.5rem; background: transparent; border: none;
+    border-bottom: 1px solid #333; border-radius: 0; padding: 5px;
+    margin-bottom: 15px; color: #fff;
+}
+
+/* =========================================
+   8. PÁGINAS ESPECÍFICAS (Login, Menu)
+   ========================================= */
+.login-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.login-box {
+    width: 100%; max-width: 350px; text-align: center;
+    border-top: 3px solid var(--gold); padding-top: 30px;
+}
+
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+.menu-btn {
+    background: #111; border: 1px solid #222; border-radius: 10px; padding: 20px;
+    text-align: center; text-decoration: none; color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; height: 110px;
+}
+.menu-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.menu-text { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; }
