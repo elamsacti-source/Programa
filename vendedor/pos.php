@@ -50,9 +50,18 @@ if (!isset($_SESSION['user_id'])) { header("Location: ../index.php"); exit; }
         <div id="cart-list" style="flex:1; overflow-y:auto; padding:15px;"></div>
 
         <div style="padding:20px; background: #0a0a0a; border-top: 1px solid var(--gold);">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 20px; align-items: flex-end;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 10px; align-items: flex-end;">
                 <span style="color: #666; font-size: 0.8rem;">TOTAL</span>
                 <span style="color: var(--gold); font-size: 2rem; font-weight: 800; line-height: 1;">S/ <span id="total-txt">0.00</span></span>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color:#666; font-size:0.7rem;">MÉTODO DE PAGO</label>
+                <select id="sel-pago" style="margin-top:5px; border:1px solid var(--gold); background:#111; color:#fff;">
+                    <option value="EFECTIVO">💵 EFECTIVO</option>
+                    <option value="YAPE">🟣 YAPE / PLIN</option>
+                    <option value="TARJETA">💳 TARJETA</option>
+                </select>
             </div>
             <button onclick="pay()" id="btn-pay" class="btn btn-primary" disabled>CONFIRMAR VENTA</button>
         </div>
@@ -191,9 +200,20 @@ if (!isset($_SESSION['user_id'])) { header("Location: ../index.php"); exit; }
         }
 
         async function pay(){
-            const b=document.getElementById('btn-pay'); b.innerText='PROCESANDO...';
+            const b=document.getElementById('btn-pay'); 
+            const metodo = document.getElementById('sel-pago').value; // CAMBIO: Obtener método
+
+            b.innerText='PROCESANDO...';
             try{
-                const r=await fetch('../api/guardar_venta.php',{method:'POST',body:JSON.stringify({usuario_id:uId, items:cart.map(i=>({...i, cantidad:i.qty, subtotal:i.sub}))})});
+                // CAMBIO: Enviar metodo_pago en el cuerpo
+                const r=await fetch('../api/guardar_venta.php',{
+                    method:'POST',
+                    body:JSON.stringify({
+                        usuario_id:uId, 
+                        metodo_pago: metodo,
+                        items:cart.map(i=>({...i, cantidad:i.qty, subtotal:i.sub}))
+                    })
+                });
                 const d=await r.json();
                 if(d.success){ alert('✅ VENTA EXITOSA'); cart=[]; render(); toggleCart(); load(''); }
                 else alert(d.message);

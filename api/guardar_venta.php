@@ -17,8 +17,12 @@ try {
     $total = 0;
     foreach($input['items'] as $i) $total += $i['subtotal'];
     
-    $stmt = $pdo->prepare("INSERT INTO ventas (total, usuario_id) VALUES (?, ?)");
-    $stmt->execute([$total, $input['usuario_id']]);
+    // CAMBIO: Recibir método de pago (Default: Efectivo)
+    $metodo = $input['metodo_pago'] ?? 'EFECTIVO';
+
+    // CAMBIO: Insertar incluyendo metodo_pago
+    $stmt = $pdo->prepare("INSERT INTO ventas (total, usuario_id, metodo_pago) VALUES (?, ?, ?)");
+    $stmt->execute([$total, $input['usuario_id'], $metodo]);
     $venta_id = $pdo->lastInsertId();
 
     // 2. Detalles y Kardex
@@ -30,7 +34,7 @@ try {
 
         if(!$productoDB) throw new Exception("Producto ID {$item['id']} no encontrado");
 
-        // Validar Stock (Opcional: Si quieres permitir negativos, borra este IF)
+        // Validar Stock (Opcional)
         /*
         if ($productoDB['stock'] < $item['cantidad']) {
             throw new Exception("Stock insuficiente para: " . $productoDB['nombre']);
